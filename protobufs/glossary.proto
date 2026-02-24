@@ -1,0 +1,58 @@
+syntax = "proto3";
+
+package glossary;
+
+message Definition {
+  string text = 1;
+  string source = 2;
+}
+
+message Link {
+  string url = 1;
+  string title = 2;
+}
+
+message Relation {
+  string to_term_id = 1;
+  string type = 2;
+}
+
+message Term {
+  string id = 1;
+  string name = 2;
+  Definition definition = 3;
+  repeated Link links = 4;
+  repeated Relation relations = 5;
+}
+
+message Empty {}
+
+message GetAllTermsResponse {
+  repeated Term terms = 1;
+}
+
+message GetTermByNameRequest {
+  string name = 1;
+}
+
+message Node {
+  string id = 1;
+  string name = 2;
+}
+
+message Edge {
+  string from = 1;
+  string to = 2;
+  string type = 3;
+}
+
+message Graph {
+  repeated Node nodes = 1;
+  repeated Edge edges = 2;
+}
+
+service GlossaryService {
+  rpc GetAllTerms(Empty) returns (GetAllTermsResponse);
+  rpc GetTermByName(GetTermByNameRequest) returns (Term);
+  rpc GetGraph(Empty) returns (Graph);
+}
