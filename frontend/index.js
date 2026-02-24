@@ -6,8 +6,29 @@ const host = window.location.protocol + '//' + window.location.host + '/grpc.web
 const client = new GlossaryServiceClient(host);
 
 let termsMap = {};        // кэш терминов
-let currentTerm = null;   // текущий выбранный термин
+let currentTerm = null;   // термин, отображаемый в боковой панели
 let network = null;       // объект vis-сети
+
+// ---- Управление модальным окном ----
+const modal = document.getElementById('modal');
+const modalBody = document.getElementById('modal-body');
+const closeBtn = document.querySelector('.close');
+
+closeBtn.onclick = closeModal;
+window.onclick = function(event) {
+    if (event.target == modal) {
+        closeModal();
+    }
+};
+
+function openModal(content) {
+    modalBody.innerHTML = content;
+    modal.style.display = 'block';
+}
+
+function closeModal() {
+    modal.style.display = 'none';
+}
 
 // ---- Загрузка данных ----
 function loadTermsList() {
@@ -25,10 +46,9 @@ function loadTermsList() {
             termsMap[term.getName()] = term;
             const li = document.createElement('li');
             li.textContent = term.getName();
-            li.addEventListener('click', () => showTermDetails(term.getName()));
+            li.addEventListener('click', () => showTermModal(term.getName()));
             listEl.appendChild(li);
         });
-        // Обновляем граф после загрузки списка
         loadGraph();
     });
 }
@@ -59,20 +79,17 @@ function loadGraph() {
             layout: { improvedLayout: true },
             edges: { arrows: 'to', smooth: true }
         };
-        // Если сеть уже существует, уничтожаем перед созданием новой
-        if (network) {
-            network.destroy();
-        }
+        if (network) network.destroy();
         network = new vis.Network(container, data, options);
         network.on('click', params => {
             if (params.nodes.length > 0) {
-                showTermDetails(params.nodes[0]);
+                showTermModal(params.nodes[0]);
             }
         });
     });
 }
 
-// ---- Отображение деталей и кнопок ----
+// ---- Отображение деталей в боковой панели (без кнопок) ----
 function showTermDetails(termName) {
     const request = new TermName();
     request.setName(termName);
@@ -109,36 +126,70 @@ function renderTermDetails(term) {
         });
         html += `</ul>`;
     }
-    // Кнопки редактирования и удаления
-    html += `<div class="form-actions">`;
-    html += `<button id="edit-term-btn">✏️ Edit</button>`;
-    html += `<button id="delete-term-btn" class="danger">🗑️ Delete</button>`;
-    html += `</div>`;
-
-    const detailsDiv = document.getElementById('details');
-    detailsDiv.innerHTML = html;
-
-    // Добавляем обработчики кнопок
-    document.getElementById('edit-term-btn').addEventListener('click', () => showEditForm(term));
-    document.getElementById('delete-term-btn').addEventListener('click', () => deleteTerm(term.getName()));
+    document.getElementById('details').innerHTML = html;
 }
 
-// ---- Форма добавления/редактирования ----
+// ---- Модальное окно с деталями термина (с кнопками Edit/Delete) ----
+function showTermModal(termName) {
+    const request = new TermName();
+    request.setName(termName);
+    client.getTermByName(request, {}, (err, term) => {
+        if (err) {
+            alert('Error loading term: ' + err.message);
+            return;
+        }
+        const name = term.getName();
+        const def = term.getDefinition();
+        const text = def.getText();
+        const links = def.getLinksList();
+        const relations = term.getRelationsList();
+
+        let html = `<div class="modal-term-details">`;
+        html += `<h2>${name}</h2>`;
+        html += `<p><strong>Definition:</strong> ${text}</p>`;
+        if (links.length > 0) {
+            html += `<p><strong>Sources:</strong></p><ul>`;
+            links.forEach(link => {
+                html += `<li><a href="${link.getUrl()}" target="_blank">${link.getTitle()}</a></li>`;
+            });
+            html += `</ul>`;
+        }
+        if (relations.length > 0) {
+            html += `<p><strong>Relations:</strong></p><ul>`;
+            relations.forEach(rel => {
+                html += `<li>${rel.getRelationType()} → ${rel.getToTerm()}</li>`;
+            });
+            html += `</ul>`;
+        }
+        html += `<div class="form-actions">`;
+        html += `<button data-action="edit" data-term="${name}">✏️ Edit</button>`;
+        html += `<button data-action="delete" data-term="${name}" class="danger">🗑️ Delete</button>`;
+        html += `</div>`;
+        html += `</div>`;
+
+        openModal(html);
+    });
+}
+
+// ---- Форма добавления/редактирования в модальном окне ----
 function showAddForm() {
-    currentTerm = null; // сбрасываем
     const emptyTerm = {
         getName: () => '',
         getDefinition: () => ({ getText: () => '', getLinksList: () => [] }),
         getRelationsList: () => []
     };
-    renderEditForm(emptyTerm, true);
+    const formHtml = generateFormHtml(emptyTerm, true);
+    openModal(formHtml);
+    attachFormHandlers(true);
 }
 
 function showEditForm(term) {
-    renderEditForm(term, false);
+    const formHtml = generateFormHtml(term, false);
+    openModal(formHtml);
+    attachFormHandlers(false);
 }
 
-function renderEditForm(term, isNew) {
+function generateFormHtml(term, isNew) {
     const name = isNew ? '' : term.getName();
     const defText = isNew ? '' : term.getDefinition().getText();
     const links = isNew ? [] : term.getDefinition().getLinksList();
@@ -152,7 +203,6 @@ function renderEditForm(term, isNew) {
         html += `<label for="term-name">Term Name</label>`;
         html += `<input type="text" id="term-name" name="name" value="${name}" required>`;
     } else {
-        // при редактировании имя не изменяем (скрытое поле)
         html += `<input type="hidden" id="term-name" name="name" value="${name}">`;
     }
 
@@ -192,24 +242,18 @@ function renderEditForm(term, isNew) {
     html += `</form>`;
     html += `</div>`;
 
-    document.getElementById('details').innerHTML = html;
+    return html;
+}
 
-    // Добавляем обработчики для динамического добавления/удаления полей
+function attachFormHandlers(isNew) {
     document.getElementById('add-link').addEventListener('click', addLinkRow);
     document.getElementById('add-relation').addEventListener('click', addRelationRow);
-    document.getElementById('cancel-form').addEventListener('click', () => {
-        if (currentTerm) {
-            renderTermDetails(currentTerm);
-        } else {
-            document.getElementById('details').innerHTML = '<h2>Term Details</h2><p>Click on a term to see details.</p>';
-        }
-    });
+    document.getElementById('cancel-form').addEventListener('click', closeModal);
     document.getElementById('term-form').addEventListener('submit', (e) => {
         e.preventDefault();
         saveTerm(isNew);
     });
 
-    // Обработчики удаления для существующих строк
     document.querySelectorAll('.remove-link').forEach(btn => {
         btn.addEventListener('click', (e) => {
             e.target.closest('.relation-row').remove();
@@ -252,7 +296,7 @@ function addRelationRow() {
     });
 }
 
-// ---- Сохранение термина (Add или Update) ----
+// ---- Сохранение термина ----
 function saveTerm(isNew) {
     const form = document.getElementById('term-form');
     const nameInput = document.getElementById('term-name');
@@ -264,10 +308,8 @@ function saveTerm(isNew) {
         return;
     }
 
-    // Собираем ссылки
-    const linkRows = document.querySelectorAll('#links-container .relation-row');
     const links = [];
-    linkRows.forEach(row => {
+    document.querySelectorAll('#links-container .relation-row').forEach(row => {
         const url = row.querySelector('.link-url').value.trim();
         const title = row.querySelector('.link-title').value.trim();
         if (url && title) {
@@ -278,22 +320,19 @@ function saveTerm(isNew) {
         }
     });
 
-    // Собираем связи
-    const relationRows = document.querySelectorAll('#relations-container .relation-row');
     const relations = [];
-    relationRows.forEach(row => {
+    document.querySelectorAll('#relations-container .relation-row').forEach(row => {
         const to = row.querySelector('.relation-to').value.trim();
         const type = row.querySelector('.relation-type').value.trim();
         if (to && type) {
             const rel = new Relation();
-            rel.setFromTerm(name);  // from всегда текущий термин
+            rel.setFromTerm(name);
             rel.setToTerm(to);
             rel.setRelationType(type);
             relations.push(rel);
         }
     });
 
-    // Создаём объект Term
     const term = new Term();
     term.setName(name);
 
@@ -305,7 +344,6 @@ function saveTerm(isNew) {
     term.setRelationsList(relations);
 
     if (isNew) {
-        // Добавление
         client.addTerm(term, {}, (err, response) => {
             if (err) {
                 alert('Error adding term: ' + err.message);
@@ -313,15 +351,14 @@ function saveTerm(isNew) {
             }
             if (response.getSuccess()) {
                 alert(response.getMessage());
-                loadTermsList();  // обновляем список и граф
-                // Показываем детали нового термина
-                showTermDetails(name);
+                closeModal();
+                loadTermsList();
+                showTermDetails(name);   // обновляем боковую панель
             } else {
                 alert('Failed: ' + response.getMessage());
             }
         });
     } else {
-        // Обновление
         client.updateTerm(term, {}, (err, response) => {
             if (err) {
                 alert('Error updating term: ' + err.message);
@@ -329,6 +366,7 @@ function saveTerm(isNew) {
             }
             if (response.getSuccess()) {
                 alert(response.getMessage());
+                closeModal();
                 loadTermsList();
                 showTermDetails(name);
             } else {
@@ -351,16 +389,41 @@ function deleteTerm(name) {
         }
         if (response.getSuccess()) {
             alert(response.getMessage());
+            closeModal();
             loadTermsList();
-            // Очищаем панель деталей
             document.getElementById('details').innerHTML = '<h2>Term Details</h2><p>Click on a term to see details.</p>';
+            currentTerm = null;
         } else {
             alert('Failed: ' + response.getMessage());
         }
     });
 }
 
-// ---- Инициализация при загрузке страницы ----
+// ---- Делегирование событий для кнопок внутри модального окна ----
+modalBody.addEventListener('click', (e) => {
+    const button = e.target.closest('button[data-action]');
+    if (!button) return;
+
+    const action = button.dataset.action;
+    const termName = button.dataset.term;
+
+    if (action === 'edit') {
+        // Загружаем свежие данные термина и открываем форму редактирования
+        const request = new TermName();
+        request.setName(termName);
+        client.getTermByName(request, {}, (err, term) => {
+            if (err) {
+                alert('Error loading term for edit: ' + err.message);
+                return;
+            }
+            showEditForm(term);
+        });
+    } else if (action === 'delete') {
+        deleteTerm(termName);
+    }
+});
+
+// ---- Инициализация ----
 window.addEventListener('load', () => {
     loadTermsList();
     document.getElementById('add-term-btn').addEventListener('click', showAddForm);
