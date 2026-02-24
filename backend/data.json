@@ -1,0 +1,139 @@
+{
+  "terms": [
+    {
+      "name": "Machine Learning",
+      "definition": {
+        "text": "Field of study that gives computers the ability to learn without being explicitly programmed.",
+        "links": [{"url": "https://en.wikipedia.org/wiki/Machine_learning", "title": "Wikipedia"}]
+      },
+      "relations": [
+        {"to": "Deep Learning", "type": "has-subfield"},
+        {"to": "Supervised Learning", "type": "has-subfield"},
+        {"to": "Unsupervised Learning", "type": "has-subfield"},
+        {"to": "Reinforcement Learning", "type": "has-subfield"}
+      ]
+    },
+    {
+      "name": "Deep Learning",
+      "definition": {
+        "text": "Subset of machine learning based on artificial neural networks with representation learning.",
+        "links": [{"url": "https://en.wikipedia.org/wiki/Deep_learning", "title": "Wikipedia"}]
+      },
+      "relations": [
+        {"to": "Neural Network", "type": "uses"},
+        {"to": "Backpropagation", "type": "uses"}
+      ]
+    },
+    {
+      "name": "Neural Network",
+      "definition": {
+        "text": "Computing system inspired by biological neural networks that constitute animal brains.",
+        "links": [{"url": "https://en.wikipedia.org/wiki/Artificial_neural_network", "title": "Wikipedia"}]
+      },
+      "relations": [
+        {"to": "Activation Function", "type": "has-part"},
+        {"to": "Backpropagation", "type": "uses"},
+        {"to": "Gradient Descent", "type": "uses"}
+      ]
+    },
+    {
+      "name": "Supervised Learning",
+      "definition": {
+        "text": "Machine learning task of learning a function that maps an input to an output based on example input-output pairs.",
+        "links": [{"url": "https://en.wikipedia.org/wiki/Supervised_learning", "title": "Wikipedia"}]
+      },
+      "relations": [{"to": "Loss Function", "type": "uses"}]
+    },
+    {
+      "name": "Unsupervised Learning",
+      "definition": {
+        "text": "Machine learning task that infers patterns from a dataset without reference to known outcomes.",
+        "links": [{"url": "https://en.wikipedia.org/wiki/Unsupervised_learning", "title": "Wikipedia"}]
+      },
+      "relations": []
+    },
+    {
+      "name": "Reinforcement Learning",
+      "definition": {
+        "text": "Machine learning area concerned with how agents ought to take actions in an environment to maximize cumulative reward.",
+        "links": [{"url": "https://en.wikipedia.org/wiki/Reinforcement_learning", "title": "Wikipedia"}]
+      },
+      "relations": []
+    },
+    {
+      "name": "Backpropagation",
+      "definition": {
+        "text": "Algorithm used to train neural networks by calculating the gradient of the loss function with respect to the weights.",
+        "links": [{"url": "https://en.wikipedia.org/wiki/Backpropagation", "title": "Wikipedia"}]
+      },
+      "relations": [{"to": "Gradient Descent", "type": "uses"}]
+    },
+    {
+      "name": "Gradient Descent",
+      "definition": {
+        "text": "Optimization algorithm used to minimize a function by iteratively moving in the direction of steepest descent.",
+        "links": [{"url": "https://en.wikipedia.org/wiki/Gradient_descent", "title": "Wikipedia"}]
+      },
+      "relations": []
+    },
+    {
+      "name": "Loss Function",
+      "definition": {
+        "text": "Function that maps the performance of a model to a real number, representing the cost of the current predictions.",
+        "links": [{"url": "https://en.wikipedia.org/wiki/Loss_function", "title": "Wikipedia"}]
+      },
+      "relations": []
+    },
+    {
+      "name": "Activation Function",
+      "definition": {
+        "text": "Function in a neural network that introduces non-linearity by mapping input to output, typically between 0 and 1 or -1 and 1.",
+        "links": [{"url": "https://en.wikipedia.org/wiki/Activation_function", "title": "Wikipedia"}]
+      },
+      "relations": []
+    },
+    {
+      "name": "Convolutional Neural Network",
+      "definition": {
+        "text": "Class of deep neural networks most commonly applied to analyzing visual imagery.",
+        "links": [{"url": "https://en.wikipedia.org/wiki/Convolutional_neural_network", "title": "Wikipedia"}]
+      },
+      "relations": [{"to": "Neural Network", "type": "is-a"}]
+    },
+    {
+      "name": "Recurrent Neural Network",
+      "definition": {
+        "text": "Class of neural networks where connections between nodes form a directed graph along a temporal sequence.",
+        "links": [{"url": "https://en.wikipedia.org/wiki/Recurrent_neural_network", "title": "Wikipedia"}]
+      },
+      "relations": [
+        {"to": "Neural Network", "type": "is-a"},
+        {"to": "Long Short-Term Memory", "type": "has-variant"}
+      ]
+    },
+    {
+      "name": "Long Short-Term Memory",
+      "definition": {
+        "text": "Artificial neural network architecture used in deep learning, capable of learning long-term dependencies.",
+        "links": [{"url": "https://en.wikipedia.org/wiki/Long_short-term_memory", "title": "Wikipedia"}]
+      },
+      "relations": [{"to": "Recurrent Neural Network", "type": "is-a"}]
+    },
+    {
+      "name": "Transformer",
+      "definition": {
+        "text": "Neural network architecture based on self-attention mechanisms, used in natural language processing.",
+        "links": [{"url": "https://en.wikipedia.org/wiki/Transformer_(machine_learning_model)", "title": "Wikipedia"}]
+      },
+      "relations": [{"to": "Neural Network", "type": "is-a"}]
+    },
+    {
+      "name": "Overfitting",
+      "definition": {
+        "text": "Modeling error that occurs when a function is too closely fit to a limited set of data points.",
+        "links": [{"url": "https://en.wikipedia.org/wiki/Overfitting", "title": "Wikipedia"}]
+      },
+      "relations": [{"to": "Supervised Learning", "type": "related-to"}]
+    }
+  ]
+}

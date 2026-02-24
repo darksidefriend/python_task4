@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+package glossary;
+
+service GlossaryService {
+  rpc GetAllTerms(Empty) returns (TermsList);
+  rpc GetTermByName(TermName) returns (Term);
+  rpc GetGraph(Empty) returns (Graph);
+}
+
+message Empty {}
+
+message TermName {
+  string name = 1;
+}
+
+message Link {
+  string url = 1;
+  string title = 2;
+}
+
+message Definition {
+  string text = 1;
+  repeated Link links = 2;
+}
+
+message Relation {
+  string from_term = 1;
+  string to_term = 2;
+  string relation_type = 3;
+}
+
+message Term {
+  string name = 1;
+  Definition definition = 2;
+  repeated Relation relations = 3;
+}
+
+message TermsList {
+  repeated Term terms = 1;
+}
+
+message Graph {
+  repeated string nodes = 1;
+  repeated Relation edges = 2;
+}
