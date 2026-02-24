@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ML Glossary MindMap</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/vis-network@9.1.2/dist/vis-network.min.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Machine Learning Glossary with Semantic Graph</h1>
+    </header>
+    <main>
+        <div class="container">
+            <div class="sidebar">
+                <h2>Terms</h2>
+                <ul id="term-list"></ul>
+            </div>
+            <div class="content">
+                <div id="details" class="details-panel">
+                    <h2>Term Details</h2>
+                    <p>Click on a term to see details.</p>
+                </div>
+                <div id="graph" class="graph-container"></div>
+            </div>
+        </div>
+    </main>
+    <script src="bundle.js"></script>
+</body>
+</html>

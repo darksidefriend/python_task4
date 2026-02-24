@@ -1,0 +1,11 @@
+{
+  "name": "frontend",
+  "version": "1.0.0",
+  "dependencies": {
+    "@improbable-eng/grpc-web": "^0.15.0",
+    "google-protobuf": "^3.21.2"
+  },
+  "scripts": {
+    "build": "browserify index.js -o bundle.js"
+  }
+}
