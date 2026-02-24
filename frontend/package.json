@@ -2,8 +2,11 @@
   "name": "frontend",
   "version": "1.0.0",
   "dependencies": {
-    "@improbable-eng/grpc-web": "^0.15.0",
-    "google-protobuf": "^3.21.2"
+    "google-protobuf": "^3.21.2",
+    "grpc-web": "^1.5.0"
+  },
+  "devDependencies": {
+    "browserify": "^17.0.0"
   },
   "scripts": {
     "build": "browserify index.js -o bundle.js"
