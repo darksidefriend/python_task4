@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>ML Glossary with Graph</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.css" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div id="container">
+        <div id="sidebar">
+            <h2>Terms</h2>
+            <ul id="term-list"></ul>
+        </div>
+        <div id="main">
+            <div id="graph"></div>
+            <div id="details">
+                <h2>Term Details</h2>
+                <div id="term-details">Click on a term to see details.</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const termList = document.getElementById('term-list');
+        const graphDiv = document.getElementById('graph');
+        const detailsDiv = document.getElementById('term-details');
+        let nodesMap = new Map(); // id -> { name }
+
+        // Загрузка списка терминов
+        fetch('/api/terms')
+            .then(res => res.json())
+            .then(terms => {
+                terms.forEach(t => {
+                    nodesMap.set(t.id, t.name);
+                    const li = document.createElement('li');
+                    li.textContent = t.name;
+                    li.addEventListener('click', () => showTerm(t.name));
+                    termList.appendChild(li);
+                });
+                loadGraph();
+            });
+
+        // Загрузка графа
+        function loadGraph() {
+            fetch('/api/graph')
+                .then(res => res.json())
+                .then(data => {
+                    const visNodes = data.nodes.map(n => ({ id: n.id, label: n.name }));
+                    const visEdges = data.edges.map(e => ({ from: e.from, to: e.to, label: e.type, arrows: 'to' }));
+
+                    const container = graphDiv;
+                    const graphData = {
+                        nodes: new vis.DataSet(visNodes),
+                        edges: new vis.DataSet(visEdges)
+                    };
+                    const options = {
+                        layout: { improvedLayout: true },
+                        edges: { smooth: { type: 'continuous' } },
+                        physics: { enabled: true }
+                    };
+                    const network = new vis.Network(container, graphData, options);
+                    network.on('click', (params) => {
+                        if (params.nodes.length > 0) {
+                            const nodeId = params.nodes[0];
+                            const termName = nodesMap.get(nodeId);
+                            if (termName) showTerm(termName);
+                        }
+                    });
+                });
+        }
+
+        // Показать детали термина
+        function showTerm(name) {
+            fetch(`/api/term/${encodeURIComponent(name)}`)
+                .then(res => res.json())
+                .then(term => {
+                    detailsDiv.innerHTML = `
+                        <h3>${term.name}</h3>
+                        <p><strong>Definition:</strong> ${term.definition.text}</p>
+                        <p><strong>Source:</strong> <a href="${term.definition.source}" target="_blank">${term.definition.source}</a></p>
+                        <p><strong>Links:</strong></p>
+                        <ul>
+                            ${term.links.map(l => `<li><a href="${l.url}" target="_blank">${l.title}</a></li>`).join('')}
+                        </ul>
+                    `;
+                })
+                .catch(err => {
+                    detailsDiv.innerHTML = `<p style="color:red;">Term not found</p>`;
+                });
+        }
+    </script>
+</body>
+</html>

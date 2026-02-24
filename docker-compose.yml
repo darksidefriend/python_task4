@@ -1,0 +1,30 @@
+version: "3.8"
+
+services:
+  glossary:
+    build:
+      context: .
+      dockerfile: glossary/Dockerfile
+    image: glossary
+    networks:
+      - glossary-net
+    expose:
+      - "50051"
+
+  web:
+    build:
+      context: .
+      dockerfile: web/Dockerfile
+    image: web
+    environment:
+      GLOSSARY_HOST: glossary
+    networks:
+      - glossary-net
+    ports:
+      - "8080:5000"
+    depends_on:
+      - glossary
+
+networks:
+  glossary-net:
+    driver: bridge
