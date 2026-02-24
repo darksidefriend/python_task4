@@ -6,6 +6,10 @@ service GlossaryService {
   rpc GetAllTerms(Empty) returns (TermsList);
   rpc GetTermByName(TermName) returns (Term);
   rpc GetGraph(Empty) returns (Graph);
+  // Новые методы
+  rpc AddTerm(Term) returns (OperationStatus);
+  rpc UpdateTerm(Term) returns (OperationStatus);
+  rpc DeleteTerm(TermName) returns (OperationStatus);
 }
 
 message Empty {}
@@ -43,4 +47,10 @@ message TermsList {
 message Graph {
   repeated string nodes = 1;
   repeated Relation edges = 2;
+}
+
+// Новое сообщение для ответа на операции изменения
+message OperationStatus {
+  bool success = 1;
+  string message = 2;
 }

@@ -257,5 +257,188 @@ proto.glossary.GlossaryServicePromiseClient.prototype.getGraph =
 };
 
 
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.glossary.Term,
+ *   !proto.glossary.OperationStatus>}
+ */
+const methodDescriptor_GlossaryService_AddTerm = new grpc.web.MethodDescriptor(
+  '/glossary.GlossaryService/AddTerm',
+  grpc.web.MethodType.UNARY,
+  proto.glossary.Term,
+  proto.glossary.OperationStatus,
+  /**
+   * @param {!proto.glossary.Term} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.glossary.OperationStatus.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.glossary.Term} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.RpcError, ?proto.glossary.OperationStatus)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.glossary.OperationStatus>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.glossary.GlossaryServiceClient.prototype.addTerm =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/glossary.GlossaryService/AddTerm',
+      request,
+      metadata || {},
+      methodDescriptor_GlossaryService_AddTerm,
+      callback);
+};
+
+
+/**
+ * @param {!proto.glossary.Term} request The
+ *     request proto
+ * @param {?Object<string, string>=} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.glossary.OperationStatus>}
+ *     Promise that resolves to the response
+ */
+proto.glossary.GlossaryServicePromiseClient.prototype.addTerm =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/glossary.GlossaryService/AddTerm',
+      request,
+      metadata || {},
+      methodDescriptor_GlossaryService_AddTerm);
+};
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.glossary.Term,
+ *   !proto.glossary.OperationStatus>}
+ */
+const methodDescriptor_GlossaryService_UpdateTerm = new grpc.web.MethodDescriptor(
+  '/glossary.GlossaryService/UpdateTerm',
+  grpc.web.MethodType.UNARY,
+  proto.glossary.Term,
+  proto.glossary.OperationStatus,
+  /**
+   * @param {!proto.glossary.Term} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.glossary.OperationStatus.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.glossary.Term} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.RpcError, ?proto.glossary.OperationStatus)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.glossary.OperationStatus>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.glossary.GlossaryServiceClient.prototype.updateTerm =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/glossary.GlossaryService/UpdateTerm',
+      request,
+      metadata || {},
+      methodDescriptor_GlossaryService_UpdateTerm,
+      callback);
+};
+
+
+/**
+ * @param {!proto.glossary.Term} request The
+ *     request proto
+ * @param {?Object<string, string>=} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.glossary.OperationStatus>}
+ *     Promise that resolves to the response
+ */
+proto.glossary.GlossaryServicePromiseClient.prototype.updateTerm =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/glossary.GlossaryService/UpdateTerm',
+      request,
+      metadata || {},
+      methodDescriptor_GlossaryService_UpdateTerm);
+};
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.glossary.TermName,
+ *   !proto.glossary.OperationStatus>}
+ */
+const methodDescriptor_GlossaryService_DeleteTerm = new grpc.web.MethodDescriptor(
+  '/glossary.GlossaryService/DeleteTerm',
+  grpc.web.MethodType.UNARY,
+  proto.glossary.TermName,
+  proto.glossary.OperationStatus,
+  /**
+   * @param {!proto.glossary.TermName} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.glossary.OperationStatus.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.glossary.TermName} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.RpcError, ?proto.glossary.OperationStatus)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.glossary.OperationStatus>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.glossary.GlossaryServiceClient.prototype.deleteTerm =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/glossary.GlossaryService/DeleteTerm',
+      request,
+      metadata || {},
+      methodDescriptor_GlossaryService_DeleteTerm,
+      callback);
+};
+
+
+/**
+ * @param {!proto.glossary.TermName} request The
+ *     request proto
+ * @param {?Object<string, string>=} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.glossary.OperationStatus>}
+ *     Promise that resolves to the response
+ */
+proto.glossary.GlossaryServicePromiseClient.prototype.deleteTerm =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/glossary.GlossaryService/DeleteTerm',
+      request,
+      metadata || {},
+      methodDescriptor_GlossaryService_DeleteTerm);
+};
+
+
 module.exports = proto.glossary;
 
