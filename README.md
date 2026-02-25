@@ -373,3 +373,109 @@ RPS (общий): 16.6
 * * * * *
 
 Итог: Для высоконагруженных систем или микросервисной архитектуры настоятельно рекомендуется использовать gRPC. REST может быть оставлен для совместимости или демонстрационных целей, но требует серьёзной оптимизации (замена БД, кэширование).
+
+### 1\. Сравнительный анализ REST, GraphQL и gRPC для разработки API: практическое бенчмаркинг-исследование
+
+-   Авторы/Источник: Sven Reichersdörfer, [Theseus.fi](https://theseus.fi/) (2025) [](https://www.theseus.fi/handle/10024/904498).
+
+-   Суть исследования: Для сравнения была разработана система управления задачами (аналог Trello) на [ASP.NET](https://asp.net/) Core и SQLite. Оценивались не только производительность, но и удобство для разработчика, поддерживаемость и пригодность к реальным проектам [](https://www.theseus.fi/handle/10024/904498).
+
+-   Ключевые результаты:
+
+    -   REST оказался самым простым в реализации и обладает наилучшей совместимостью.
+
+    -   GraphQL предоставил гибкость в запросах, но добавил сложности в настройку.
+
+    -   gRPC показал самую высокую производительность и эффективность коммуникации, однако вызвал трудности с отладкой и начальным освоением [](https://www.theseus.fi/handle/10024/904498).
+
+-   Вывод: Выбор стиля API зависит от контекста. REST остается надежным универсальным выбором, GraphQL хорош для data-ориентированных приложений, а gRPC оптимален для высокопроизводительного общения между сервисами [](https://www.theseus.fi/handle/10024/904498).
+
+### 2\. Оценка производительности коммуникации микросервисов с REST, GraphQL и gRPC
+
+-   Авторы/Источник: Muhammad Niswar et al., International Journal of Electronics and Telecommunications (2024) [](https://www.semanticscholar.org/paper/Performance-evaluation-of-microservices-with-REST%2C-Niswar-Safruddin/8526bef65e8d241155be2ce807989afc146f0b18)[](https://ijet.pl/index.php/ijet/article/view/10.24425-ijet.2024.149562)[](https://doaj.org/article/57cd5b1b88204a43bfbb2fd245c989e0).
+
+-   Суть исследования: Было создано три микросервиса в отдельных контейнерах, каждый с базами Redis и MySQL. Сравнение проводилось по времени ответа и загрузке CPU при выборке "плоских" и "вложенных" данных с количеством запросов от 100 до 500 [](https://ijet.pl/index.php/ijet/article/view/10.24425-ijet.2024.149562)[](https://doaj.org/article/57cd5b1b88204a43bfbb2fd245c989e0).
+
+-   Ключевые результаты:
+
+    -   gRPC показал самое быстрое время ответа [](https://www.semanticscholar.org/paper/Performance-evaluation-of-microservices-with-REST%2C-Niswar-Safruddin/8526bef65e8d241155be2ce807989afc146f0b18)[](https://ijet.pl/index.php/ijet/article/view/10.24425-ijet.2024.149562)[](https://doaj.org/article/57cd5b1b88204a43bfbb2fd245c989e0).
+
+    -   REST занял второе место по скорости, за ним следует GraphQL [](https://ijet.pl/index.php/ijet/article/view/10.24425-ijet.2024.149562)[](https://doaj.org/article/57cd5b1b88204a43bfbb2fd245c989e0).
+
+    -   GraphQL продемонстрировал более высокое потребление CPU по сравнению с gRPC и REST [](https://ijet.pl/index.php/ijet/article/view/10.24425-ijet.2024.149562)[](https://doaj.org/article/57cd5b1b88204a43bfbb2fd245c989e0).
+
+-   Вывод: Результаты дают понимание для разработчиков и архитекторов при выборе протокола коммуникации под конкретные задачи и рабочие нагрузки [](https://ijet.pl/index.php/ijet/article/view/10.24425-ijet.2024.149562).
+
+### 3\. Сравнительный анализ RESTful, GraphQL и gRPC API: понимание производительности из нагрузочного и стресс-тестирования
+
+-   Авторы/Источник: DOAJ (2024) [](https://doaj.org/article/65ddca6d02214f999bc79190da4eefde).
+
+-   Суть исследования: Проведены нагрузочное и стресс-тестирование трех архитектур API с использованием набора данных из 1000 записей. Оценивались потребление CPU, памяти, время отклика, загрузки, задержки, процент успешных и ошибочных запросов [](https://doaj.org/article/65ddca6d02214f999bc79190da4eefde).
+
+-   Ключевые результаты:
+
+    -   RESTful достиг наивысшего общего количества запросов, но показал большее потребление ресурсов и более высокий процент ошибок [](https://doaj.org/article/65ddca6d02214f999bc79190da4eefde).
+
+    -   GraphQL продемонстрировал лучшую эффективность по CPU и памяти с высокой стабильностью, но с более высокой задержкой и медленным временем ответа [](https://doaj.org/article/65ddca6d02214f999bc79190da4eefde).
+
+    -   gRPC показал сбалансированные результаты с умеренной задержкой и потреблением ресурсов, но с немного большим потреблением памяти при стрессе [](https://doaj.org/article/65ddca6d02214f999bc79190da4eefde).
+
+-   Вывод: RESTful подходит для сценариев с высокой пропускной способностью, GraphQL --- для эффективности и стабильности, а gRPC --- для сбалансированной работы [](https://doaj.org/article/65ddca6d02214f999bc79190da4eefde).
+
+### 4\. Сравнение коммуникации микросервисов, разработанных на нескольких языках программирования
+
+-   Авторы/Источник: Lucas Martins Chaves, Университет Пассо Фундо, Бразилия (2024) [](http://repositorio.upf.br/handle/riupf/2842?locale=en).
+
+-   Суть исследования: Были разработаны приложения на Go, JavaScript и Python, реализующие REST, gRPC и GraphQL. Нагрузочные тесты проводились с помощью K6, данные собирались через Elastic Stack [](http://repositorio.upf.br/handle/riupf/2842?locale=en).
+
+-   Ключевые результаты:
+
+    -   Наибольшую общую производительность показал язык Go [](http://repositorio.upf.br/handle/riupf/2842?locale=en).
+
+    -   GraphQL показал лучшую производительность на операциях вставки (insertions) [](http://repositorio.upf.br/handle/riupf/2842?locale=en).
+
+    -   GraphQL и REST показали схожее поведение, с небольшим преимуществом REST при работе с большими объемами данных [](http://repositorio.upf.br/handle/riupf/2842?locale=en).
+
+### 5\. Анализ производительности моделей протоколов API REST, SOAP, GraphQL и RPC в симуляции операций CRUD, сортировки и поиска данных
+
+-   Авторы/Источник: Abdul Halim Arif, Universitas Malikussaleh, Индонезия (2024) [](http://rama.unimal.ac.id/cgi/exportview/creators/Arif=3AAbdul_Halim=3A=3A/Atom/Arif=3AAbdul_Halim=3A=3A.xml).
+
+-   Суть исследования: Проведено нагрузочное и стресс-тестирование четырех протоколов для измерения реакции и устойчивости системы при различных условиях нагрузки на операциях create, read, update, delete, сортировки и поиска [](http://rama.unimal.ac.id/cgi/exportview/creators/Arif=3AAbdul_Halim=3A=3A/Atom/Arif=3AAbdul_Halim=3A=3A.xml).
+
+-   Ключевые результаты (среднее время ответа / процент ошибок):
+
+    -   Create: REST (10 мс / 41% ошибок), SOAP (65 мс / 28.4%), GraphQL (44 мс / 0%), RPC (29 мс / 0%).
+
+    -   Read: REST (19 мс / 47.2%), SOAP (21 мс / 40.2%), GraphQL (9 мс / 42.8%), RPC (9 мс / 0.4%).
+
+    -   Update: REST (5 мс / 23.6%), SOAP (18 мс / 57%), GraphQL (8 мс / 0%), RPC (20 мс / 1.6%).
+
+    -   Delete: REST (931 мс / 38.4%), SOAP (112 мс / 15.4%), GraphQL (9 мс / 12.6%), RPC (14 мс / 0%).
+
+    -   Sorting: REST (895 мс / 23.4%), SOAP (51 мс / 11.8%), GraphQL (87 мс / 27%), RPC (4 мс / 1%).
+
+    -   Searching: REST (4 мс / 38.4%), SOAP (85 мс / 49.8%), GraphQL (66 мс / 0%), RPC (6 мс / 0.8%).
+
+-   Вывод: RPC и GraphQL показали превосходную производительность в большинстве сценариев, особенно в эффективности и скорости ответа, в то время как REST и SOAP показали недостатки под высокой нагрузкой [](http://rama.unimal.ac.id/cgi/exportview/creators/Arif=3AAbdul_Halim=3A=3A/Atom/Arif=3AAbdul_Halim=3A=3A.xml).
+
+### Сводный анализ результатов
+
+Ниже представлена таблица, обобщающая ключевые выводы из исследованных работ.
+
+| Протокол | Сильные стороны (Performance & Efficiency) | Слабые стороны (Trade-offs) | Типичные сценарии использования [](https://www.dio.me/articles/rest-vs-grpc-vs-graphql-qual-escolher-em-2025-161416be9cec) |
+| --- | --- | --- | --- |
+| REST | Высокая пропускная способность, простота, отличная совместимость, эффективный кэш [](https://www.theseus.fi/handle/10024/904498)[](https://doaj.org/article/65ddca6d02214f999bc79190da4eefde)[](https://www.dio.me/articles/rest-vs-grpc-vs-graphql-qual-escolher-em-2025-161416be9cec). | Более высокое потребление ресурсов и процент ошибок под нагрузкой, может быть медленнее для сложных запросов [](https://doaj.org/article/65ddca6d02214f999bc79190da4eefde)[](https://ijet.pl/index.php/ijet/article/view/10.24425-ijet.2024.149562)[](http://rama.unimal.ac.id/cgi/exportview/creators/Arif=3AAbdul_Halim=3A=3A/Atom/Arif=3AAbdul_Halim=3A=3A.xml). | Публичные API, сервисы для сторонних разработчиков, веб-сервисы, где важна простота интеграции и кэширование [](https://www.theseus.fi/handle/10024/904498)[](https://www.dio.me/articles/rest-vs-grpc-vs-graphql-qual-escolher-em-2025-161416be9cec). |
+| GraphQL | Гибкость запросов, эффективность CPU и памяти, высокая стабильность, отличная производительность на вставках [](https://doaj.org/article/65ddca6d02214f999bc79190da4eefde)[](http://repositorio.upf.br/handle/riupf/2842?locale=en). | Высокая задержка и медленное время ответа, сложность настройки, более высокое потребление CPU в некоторых сценариях [](https://doaj.org/article/65ddca6d02214f999bc79190da4eefde)[](https://ijet.pl/index.php/ijet/article/view/10.24425-ijet.2024.149562)[](https://www.dio.me/articles/rest-vs-grpc-vs-graphql-qual-escolher-em-2025-161416be9cec). | Приложения с разнородными клиентами (web/mobile), агрегация данных из нескольких источников, сложные запросы к связанным данным [](https://www.theseus.fi/handle/10024/904498)[](https://www.dio.me/articles/rest-vs-grpc-vs-graphql-qual-escolher-em-2025-161416be9cec). |
+| gRPC | Самая высокая скорость ответа, сбалансированное потребление ресурсов, отличная производительность для CRUD и сортировки, поддержка streaming [](https://www.semanticscholar.org/paper/Performance-evaluation-of-microservices-with-REST%2C-Niswar-Safruddin/8526bef65e8d241155be2ce807989afc146f0b18)[](https://ijet.pl/index.php/ijet/article/view/10.24425-ijet.2024.149562)[](http://rama.unimal.ac.id/cgi/exportview/creators/Arif=3AAbdul_Halim=3A=3A/Atom/Arif=3AAbdul_Halim=3A=3A.xml). | Сложность отладки, более высокое потребление памяти при стрессе, ограниченная поддержка в браузерах [](https://www.theseus.fi/handle/10024/904498)[](https://doaj.org/article/65ddca6d02214f999bc79190da4eefde)[](https://www.dio.me/articles/rest-vs-grpc-vs-graphql-qual-escolher-em-2025-161416be9cec). | Высокопроизводительная коммуникация между микросервисами, системы реального времени, streaming-приложения (IoT, чаты) [](https://www.theseus.fi/handle/10024/904498)[](https://www.dio.me/articles/rest-vs-grpc-vs-graphql-qual-escolher-em-2025-161416be9cec). |
+
+### Заключение
+
+Исследования едины в том, что не существует единственного "лучшего" протокола. Выбор зависит от контекста [](https://www.theseus.fi/handle/10024/904498)[](https://www.dio.me/articles/rest-vs-grpc-vs-graphql-qual-escolher-em-2025-161416be9cec).
+
+-   gRPC является явным лидером по сырой производительности (скорость ответа, эффективность) и идеально подходит для внутренней коммуникации между микросервисами [](https://www.semanticscholar.org/paper/Performance-evaluation-of-microservices-with-REST%2C-Niswar-Safruddin/8526bef65e8d241155be2ce807989afc146f0b18)[](https://ijet.pl/index.php/ijet/article/view/10.24425-ijet.2024.149562)[](http://rama.unimal.ac.id/cgi/exportview/creators/Arif=3AAbdul_Halim=3A=3A/Atom/Arif=3AAbdul_Halim=3A=3A.xml).
+
+-   GraphQL выделяется своей гибкостью и эффективностью использования ресурсов, что делает его отличным выбором для frontend-клиентов и сложных запросов, но ценой более высокой задержки [](https://doaj.org/article/65ddca6d02214f999bc79190da4eefde)[](http://repositorio.upf.br/handle/riupf/2842?locale=en).
+
+-   REST остается надежным и простым стандартом для публичных API, обеспечивая высокую пропускную способность и совместимость, но может потреблять больше ресурсов под высокой нагрузкой [](https://www.theseus.fi/handle/10024/904498)[](https://doaj.org/article/65ddca6d02214f999bc79190da4eefde).
+
+Современные высоконагруженные системы часто используют гибридный подход, применяя каждый протокол для решения наиболее подходящих для него задач [](https://www.dio.me/articles/rest-vs-grpc-vs-graphql-qual-escolher-em-2025-161416be9cec).
