@@ -51,32 +51,6 @@ docker run --rm -v $(pwd):/workspace -w /workspace node:18-slim /bin/bash -c "ap
 
 -   `glossary_grpc_web_pb.js`
 
-### 3.3. Изучение структуры проекта
-
-Убедитесь, что все необходимые файлы на месте:
-
-text
-
-.
-├── backend/
-│   ├── Dockerfile
-│   ├── requirements.txt
-│   ├── server.py
-│   └── data.json
-├── envoy/
-│   └── envoy.yaml
-├── frontend/
-│   ├── Dockerfile
-│   ├── index.html
-│   ├── style.css
-│   ├── index.js
-│   ├── package.json
-│   ├── nginx.conf
-│   └── static/               # сгенерированные proto-файлы
-├── proto/
-│   └── glossary.proto
-└── docker-compose.yml
-
 * * * * *
 
 4\. Процесс развертывания
